@@ -3,7 +3,7 @@ import { Navigate, useLocation } from 'react-router-dom'
 import LoadingSpinner from '../ui/LoadingSpinner'
 
 const ProtectedRoute = ({ children }) => {
-  const { isAuthenticated, isLoading } = useAuth()
+  const { isAuthenticated, isAdmin, isLoading } = useAuth()
   const location = useLocation()
 
   if (isLoading) {
@@ -18,10 +18,22 @@ const ProtectedRoute = ({ children }) => {
   }
 
   if (!isAuthenticated) {
-    // Redirect to login page with return url
+    // Redirect to appropriate login page with return url
+    const loginPath = location.pathname.startsWith('/admin') ? '/admin/login' : '/auth/login'
     return (
       <Navigate 
-        to="/admin/login" 
+        to={loginPath} 
+        state={{ from: location }} 
+        replace 
+      />
+    )
+  }
+
+  // Check if admin route requires admin privileges
+  if (location.pathname.startsWith('/admin') && !isAdmin) {
+    return (
+      <Navigate 
+        to="/auth/login" 
         state={{ from: location }} 
         replace 
       />

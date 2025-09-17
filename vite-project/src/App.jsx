@@ -10,6 +10,9 @@ import SkipToMain from './components/ui/SkipToMain'
 import Home from './pages/Home'
 import Details from './pages/Details'
 import Register from './pages/Register'
+import Login from './pages/auth/Login'
+import Signup from './pages/auth/Signup'
+import Dashboard from './pages/Dashboard'
 import AdminLogin from './pages/admin/Login'
 import AdminDashboard from './pages/admin/Dashboard'
 import NotFound from './pages/NotFound'
@@ -20,6 +23,7 @@ import ProtectedRoute from './components/auth/ProtectedRoute'
 function App() {
   const location = useLocation()
   const isAdminRoute = location.pathname.startsWith('/admin')
+  const isAuthRoute = location.pathname.startsWith('/auth') || location.pathname === '/dashboard'
 
   return (
     <AuthProvider>
@@ -31,7 +35,7 @@ function App() {
         <ScrollToTop />
         
         {/* Navigation - hide on admin routes */}
-        {!isAdminRoute && <Navbar />}
+        {!isAdminRoute && !isAuthRoute && <Navbar />}
         
         {/* Main content with page transitions */}
         <AnimatePresence mode="wait">
@@ -40,6 +44,20 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/details" element={<Details />} />
             <Route path="/register" element={<Register />} />
+            
+            {/* Auth Routes */}
+            <Route path="/auth/login" element={<Login />} />
+            <Route path="/auth/signup" element={<Signup />} />
+            
+            {/* Protected User Routes */}
+            <Route 
+              path="/dashboard" 
+              element={
+                <ProtectedRoute>
+                  <Dashboard />
+                </ProtectedRoute>
+              } 
+            />
             
             {/* Admin Routes */}
             <Route path="/admin/login" element={<AdminLogin />} />
@@ -58,7 +76,7 @@ function App() {
         </AnimatePresence>
         
         {/* Footer - hide on admin routes */}
-        {!isAdminRoute && <Footer />}
+        {!isAdminRoute && !isAuthRoute && <Footer />}
       </div>
     </AuthProvider>
   )

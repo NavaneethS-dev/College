@@ -66,7 +66,16 @@ api.interceptors.response.use(
 
 // API methods
 export const authAPI = {
-  login: (credentials) => api.post('/auth/admin/login', credentials),
+  signup: (userData) => api.post('/auth/signup', userData),
+  login: (credentials) => api.post('/auth/login', credentials),
+  adminLogin: (credentials) => api.post('/auth/admin/login', credentials),
+}
+
+export const userAPI = {
+  getProfile: () => api.get('/user/profile'),
+  updateProfile: (data) => api.put('/user/profile', data),
+  getMyTeam: () => api.get('/user/team'),
+  updateMyTeam: (data) => api.put('/user/team', data),
 }
 
 export const teamsAPI = {

@@ -1,35 +1,40 @@
 import { useState } from 'react'
 import { motion } from 'framer-motion'
 import { useForm } from 'react-hook-form'
-import { Navigate, useLocation } from 'react-router-dom'
+import { Link, Navigate, useLocation, useNavigate } from 'react-router-dom'
 import { 
-  Lock, 
   Mail, 
   Eye, 
   EyeOff, 
   LogIn, 
   Loader2,
-  Shield,
-  AlertCircle
+  AlertCircle,
+  ArrowLeft,
+  CheckCircle
 } from 'lucide-react'
 import toast from 'react-hot-toast'
 import { useAuth } from '../../contexts/AuthContext'
 
-const AdminLogin = () => {
+const Login = () => {
   const [showPassword, setShowPassword] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
-  const { adminLogin, isAuthenticated } = useAuth()
+  const { login, isAuthenticated } = useAuth()
   const location = useLocation()
+  const navigate = useNavigate()
 
   const {
     register,
     handleSubmit,
     formState: { errors }
-  } = useForm()
+  } = useForm({
+    defaultValues: {
+      email: location.state?.email || ''
+    }
+  })
 
   // Redirect if already authenticated
   if (isAuthenticated) {
-    const from = location.state?.from?.pathname || '/admin/dashboard'
+    const from = location.state?.from?.pathname || '/dashboard'
     return <Navigate to={from} replace />
   }
 
@@ -37,7 +42,7 @@ const AdminLogin = () => {
     setIsLoading(true)
 
     try {
-      await adminLogin(data.email, data.password)
+      await login(data.email, data.password)
       
       toast.success('Login successful!', {
         icon: '🎉',
@@ -64,6 +69,25 @@ const AdminLogin = () => {
     duration: 0.4
   }
 
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1
+      }
+    }
+  }
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: { duration: 0.6 }
+    }
+  }
+
   return (
     <motion.div
       initial="initial"
@@ -77,30 +101,67 @@ const AdminLogin = () => {
       <div className="absolute inset-0 overflow-hidden">
         <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-primary-500/10 rounded-full blur-3xl" />
         <div className="absolute bottom-1/4 right-1/4 w-64 h-64 bg-secondary-500/10 rounded-full blur-3xl" />
+        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-accent-500/5 rounded-full blur-3xl" />
       </div>
 
       <div className="relative z-10 w-full max-w-md">
+        {/* Back to Home */}
+        <motion.div
+          initial={{ opacity: 0, x: -20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.6 }}
+          className="mb-6"
+        >
+          <Link
+            to="/"
+            className="inline-flex items-center text-gray-400 hover:text-primary-400 transition-colors"
+          >
+            <ArrowLeft className="w-4 h-4 mr-2" />
+            Back to Home
+          </Link>
+        </motion.div>
+
+        {/* Success Message from Signup */}
+        {location.state?.message && (
+          <motion.div
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            className="mb-6 p-4 bg-green-900/20 border border-green-500/30 rounded-lg"
+          >
+            <div className="flex items-center space-x-2">
+              <CheckCircle className="w-5 h-5 text-green-400" />
+              <p className="text-green-300 text-sm">{location.state.message}</p>
+            </div>
+          </motion.div>
+        )}
+
         {/* Header */}
         <motion.div
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
+          variants={containerVariants}
+          initial="hidden"
+          animate="visible"
           className="text-center mb-8"
         >
-          <div className="inline-flex items-center justify-center w-16 h-16 bg-primary-500/20 rounded-full mb-4">
-            <Shield className="w-8 h-8 text-primary-400" />
-          </div>
-          <h1 className="text-3xl font-bold text-white mb-2">Admin Login</h1>
-          <p className="text-gray-400">
-            Access the HACK-AI-THON admin dashboard
-          </p>
+          <motion.div
+            variants={itemVariants}
+            className="inline-flex items-center justify-center w-16 h-16 bg-primary-500/20 rounded-full mb-4"
+          >
+            <LogIn className="w-8 h-8 text-primary-400" />
+          </motion.div>
+          <motion.h1 variants={itemVariants} className="text-3xl font-bold text-white mb-2">
+            Welcome Back
+          </motion.h1>
+          <motion.p variants={itemVariants} className="text-gray-400">
+            Sign in to access your HACK-AI-THON dashboard
+          </motion.p>
         </motion.div>
 
         {/* Login Form */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.1 }}
+          transition={{ duration: 0.6, delay: 0.2 }}
           className="card"
         >
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
@@ -142,13 +203,18 @@ const AdminLogin = () => {
 
             {/* Password Field */}
             <div>
-              <label htmlFor="password" className="block text-sm font-medium text-gray-300 mb-2">
-                Password
-              </label>
+              <div className="flex items-center justify-between mb-2">
+                <label htmlFor="password" className="block text-sm font-medium text-gray-300">
+                  Password
+                </label>
+                <Link
+                  to="/auth/forgot-password"
+                  className="text-sm text-primary-400 hover:text-primary-300 transition-colors"
+                >
+                  Forgot password?
+                </Link>
+              </div>
               <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <Lock className="h-5 w-5 text-gray-400" />
-                </div>
                 <input
                   id="password"
                   type={showPassword ? 'text' : 'password'}
@@ -160,7 +226,7 @@ const AdminLogin = () => {
                       message: 'Password must be at least 8 characters'
                     }
                   })}
-                  className={`input-field pl-10 pr-10 ${errors.password ? 'input-error' : ''}`}
+                  className={`input-field pr-10 ${errors.password ? 'input-error' : ''}`}
                   placeholder="Enter your password"
                 />
                 <button
@@ -187,6 +253,19 @@ const AdminLogin = () => {
               )}
             </div>
 
+            {/* Remember Me */}
+            <div className="flex items-center">
+              <input
+                id="remember"
+                type="checkbox"
+                {...register('remember')}
+                className="w-4 h-4 text-primary-600 bg-gray-800 border-gray-600 rounded focus:ring-primary-500 focus:ring-2"
+              />
+              <label htmlFor="remember" className="ml-2 text-sm text-gray-300">
+                Remember me for 30 days
+              </label>
+            </div>
+
             {/* Submit Button */}
             <button
               type="submit"
@@ -207,40 +286,46 @@ const AdminLogin = () => {
             </button>
           </form>
 
-          {/* Demo Credentials Info */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.3 }}
-            className="mt-6 p-4 bg-blue-900/20 border border-blue-500/30 rounded-lg"
-          >
-            <div className="flex items-start space-x-2">
-              <AlertCircle className="w-5 h-5 text-blue-400 mt-0.5 flex-shrink-0" />
-              <div>
-                <h3 className="text-sm font-medium text-blue-400 mb-1">Demo Credentials</h3>
-                <p className="text-xs text-gray-300">
-                  Use the admin credentials from your .env file to access the dashboard.
-                  Default: admin@hackathon.com / ChangeThis123!
-                </p>
-              </div>
-            </div>
-          </motion.div>
+          {/* Signup Link */}
+          <div className="mt-6 text-center">
+            <p className="text-gray-400">
+              Don't have an account?{' '}
+              <Link
+                to="/auth/signup"
+                className="text-primary-400 hover:text-primary-300 font-medium transition-colors"
+              >
+                Create one here
+              </Link>
+            </p>
+          </div>
         </motion.div>
 
-        {/* Footer */}
+        {/* Quick Access */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.4 }}
-          className="text-center mt-8"
+          className="mt-6 text-center"
         >
-          <p className="text-gray-500 text-sm">
-            Protected by enterprise-grade security
-          </p>
+          <div className="flex items-center justify-center space-x-4 text-sm">
+            <Link
+              to="/register"
+              className="text-gray-400 hover:text-primary-400 transition-colors"
+            >
+              Team Registration
+            </Link>
+            <span className="text-gray-600">•</span>
+            <Link
+              to="/details"
+              className="text-gray-400 hover:text-primary-400 transition-colors"
+            >
+              Event Details
+            </Link>
+          </div>
         </motion.div>
       </div>
     </motion.div>
   )
 }
 
-export default AdminLogin
+export default Login
