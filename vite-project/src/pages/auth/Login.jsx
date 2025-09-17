@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { motion } from 'framer-motion'
 import { useForm } from 'react-hook-form'
-import { Link, Navigate, useLocation, useNavigate } from 'react-router-dom'
+import { Link, Navigate, useLocation, useNavigate, useSearchParams } from 'react-router-dom'
 import { 
   Mail, 
   Eye, 
@@ -21,6 +21,7 @@ const Login = () => {
   const { login, isAuthenticated } = useAuth()
   const location = useLocation()
   const navigate = useNavigate()
+  const [searchParams] = useSearchParams()
 
   const {
     register,
@@ -28,14 +29,14 @@ const Login = () => {
     formState: { errors }
   } = useForm({
     defaultValues: {
-      email: location.state?.email || ''
+      email: location.state?.email || searchParams.get('email') || ''
     }
   })
 
   // Redirect if already authenticated
   if (isAuthenticated) {
-    const from = location.state?.from?.pathname || '/dashboard'
-    return <Navigate to={from} replace />
+    const redirect = searchParams.get('redirect') || location.state?.from?.pathname || '/dashboard'
+    return <Navigate to={redirect} replace />
   }
 
   const onSubmit = async (data) => {
@@ -48,6 +49,10 @@ const Login = () => {
         icon: '🎉',
         duration: 3000
       })
+
+      // Handle redirect after successful login
+      const redirect = searchParams.get('redirect') || location.state?.from?.pathname || '/dashboard'
+      navigate(redirect, { replace: true })
 
       // Navigation will be handled by the auth context and protected route
     } catch (error) {

@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { motion } from 'framer-motion'
 import { useForm } from 'react-hook-form'
-import { Link, Navigate, useNavigate } from 'react-router-dom'
+import { Link, Navigate, useNavigate, useSearchParams } from 'react-router-dom'
 import { 
   User, 
   Mail, 
@@ -23,6 +23,7 @@ const Signup = () => {
   const [isLoading, setIsLoading] = useState(false)
   const { isAuthenticated } = useAuth()
   const navigate = useNavigate()
+  const [searchParams] = useSearchParams()
 
   const {
     register,
@@ -53,8 +54,12 @@ const Signup = () => {
         duration: 5000
       })
 
+      // Preserve redirect parameter when navigating to login
+      const redirect = searchParams.get('redirect')
+      const loginUrl = redirect ? `/auth/login?redirect=${encodeURIComponent(redirect)}` : '/auth/login'
+
       // Redirect to login page
-      navigate('/auth/login', { 
+      navigate(loginUrl, { 
         state: { 
           message: 'Account created successfully! Please login to continue.',
           email: data.email 

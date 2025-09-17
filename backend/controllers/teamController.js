@@ -279,6 +279,8 @@ exports.exportTeams = async (req, res, next) => {
       'Status',
       'Project Idea',
       'Submitted At',
+      'Updated At',
+      'Total Members',
       'Member 1 Name',
       'Member 1 Email',
       'Member 1 Phone',
@@ -315,7 +317,9 @@ exports.exportTeams = async (req, res, next) => {
         team.teamName,
         team.status,
         team.projectIdea || '',
-        team.submittedAt.toISOString()
+        team.submittedAt.toISOString(),
+        team.updatedAt.toISOString(),
+        team.members.length
       ]
 
       // Add member data (up to 4 members)

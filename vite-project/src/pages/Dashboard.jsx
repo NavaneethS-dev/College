@@ -614,8 +614,38 @@ const Dashboard = () => {
                     <li>• All team members must be present during the hackathon</li>
                     <li>• Check your email regularly for important updates</li>
                     <li>• Contact organizers if you need to make major changes</li>
+                    <li>• Your team registration is linked to your account - keep your login secure</li>
+                    <li>• Only you can edit your team details - other members cannot make changes</li>
                   </ul>
                 </div>
+              </div>
+            </div>
+
+            {/* Quick Actions */}
+            <div className="card">
+              <h3 className="text-xl font-semibold text-white mb-4">Quick Actions</h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <a
+                  href="/details"
+                  className="flex items-center p-4 bg-gray-800/50 rounded-lg hover:bg-gray-700/50 transition-colors group"
+                >
+                  <Calendar className="w-5 h-5 text-primary-400 mr-3" />
+                  <div>
+                    <div className="font-medium text-white group-hover:text-primary-400">View Schedule</div>
+                    <div className="text-sm text-gray-400">Check event timeline</div>
+                  </div>
+                </a>
+                
+                <a
+                  href="/details#faqs"
+                  className="flex items-center p-4 bg-gray-800/50 rounded-lg hover:bg-gray-700/50 transition-colors group"
+                >
+                  <AlertCircle className="w-5 h-5 text-secondary-400 mr-3" />
+                  <div>
+                    <div className="font-medium text-white group-hover:text-secondary-400">FAQs</div>
+                    <div className="text-sm text-gray-400">Get answers to common questions</div>
+                  </div>
+                </a>
               </div>
             </div>
           </motion.div>

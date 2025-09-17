@@ -408,6 +408,11 @@ const Dashboard = () => {
                               <div className="text-sm text-gray-400">
                                 {team.registrationNumber}
                               </div>
+                              {team.projectIdea && (
+                                <div className="text-xs text-gray-500 mt-1 truncate max-w-xs">
+                                  Project: {team.projectIdea}
+                                </div>
+                              )}
                             </div>
                           </td>
                           <td className="px-6 py-4">
@@ -417,6 +422,12 @@ const Dashboard = () => {
                             <div className="text-xs text-gray-500">
                               Leader: {team.members[0]?.name}
                             </div>
+                            <div className="text-xs text-gray-500">
+                              Email: {team.members[0]?.email}
+                            </div>
+                            <div className="text-xs text-gray-500">
+                              College: {team.members[0]?.college}
+                            </div>
                           </td>
                           <td className="px-6 py-4">
                             <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getStatusColor(team.status)}`}>
@@ -425,7 +436,10 @@ const Dashboard = () => {
                             </span>
                           </td>
                           <td className="px-6 py-4 text-sm text-gray-400">
-                            {new Date(team.submittedAt).toLocaleDateString()}
+                            <div>{new Date(team.submittedAt).toLocaleDateString()}</div>
+                            <div className="text-xs text-gray-500">
+                              {new Date(team.submittedAt).toLocaleTimeString()}
+                            </div>
                           </td>
                           <td className="px-6 py-4 text-right">
                             <div className="flex items-center justify-end space-x-2">
@@ -559,12 +573,22 @@ const Dashboard = () => {
                       
                       <div className="flex items-center space-x-3">
                         <Mail className="w-4 h-4 text-gray-400" />
-                        <span className="text-gray-300">{member.email}</span>
+                        <a 
+                          href={`mailto:${member.email}`}
+                          className="text-gray-300 hover:text-primary-400 transition-colors"
+                        >
+                          {member.email}
+                        </a>
                       </div>
                       
                       <div className="flex items-center space-x-3">
                         <Phone className="w-4 h-4 text-gray-400" />
-                        <span className="text-gray-300">{member.phone}</span>
+                        <a 
+                          href={`tel:${member.phone}`}
+                          className="text-gray-300 hover:text-primary-400 transition-colors"
+                        >
+                          {member.phone}
+                        </a>
                       </div>
                       
                       <div className="flex items-center space-x-3">
@@ -591,9 +615,48 @@ const Dashboard = () => {
                 ))}
               </div>
               
+              {/* Project Idea Section */}
+              {selectedTeam.projectIdea && (
+                <div className="mt-6 card bg-gray-800/30">
+                  <h3 className="text-lg font-semibold text-white mb-3">Project Idea</h3>
+                  <p className="text-gray-300 leading-relaxed">{selectedTeam.projectIdea}</p>
+                </div>
+              )}
+              
+              {/* Team Statistics */}
+              <div className="mt-6 grid grid-cols-2 md:grid-cols-4 gap-4">
+                <div className="text-center p-3 bg-gray-800/30 rounded-lg">
+                  <div className="text-2xl font-bold text-primary-400">{selectedTeam.members.length}</div>
+                  <div className="text-xs text-gray-400">Members</div>
+                </div>
+                <div className="text-center p-3 bg-gray-800/30 rounded-lg">
+                  <div className="text-2xl font-bold text-secondary-400">
+                    {new Set(selectedTeam.members.map(m => m.college)).size}
+                  </div>
+                  <div className="text-xs text-gray-400">Colleges</div>
+                </div>
+                <div className="text-center p-3 bg-gray-800/30 rounded-lg">
+                  <div className="text-2xl font-bold text-accent-400">
+                    {new Set(selectedTeam.members.map(m => m.branch)).size}
+                  </div>
+                  <div className="text-xs text-gray-400">Branches</div>
+                </div>
+                <div className="text-center p-3 bg-gray-800/30 rounded-lg">
+                  <div className="text-2xl font-bold text-green-400">
+                    {Math.round((Date.now() - new Date(selectedTeam.submittedAt)) / (1000 * 60 * 60 * 24))}
+                  </div>
+                  <div className="text-xs text-gray-400">Days Ago</div>
+                </div>
+              </div>
+              
               <div className="mt-6 flex items-center justify-between">
                 <div className="text-sm text-gray-400">
                   Registered on {new Date(selectedTeam.submittedAt).toLocaleString()}
+                  {selectedTeam.updatedAt !== selectedTeam.submittedAt && (
+                    <div className="text-xs text-gray-500 mt-1">
+                      Last updated: {new Date(selectedTeam.updatedAt).toLocaleString()}
+                    </div>
+                  )}
                 </div>
                 
                 <div className="flex items-center space-x-2">

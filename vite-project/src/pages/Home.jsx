@@ -206,9 +206,8 @@ const Home = () => {
             <Link
               to="/register"
               className="btn-primary text-lg px-8 py-4 glow-primary"
-              disabled={!stats.isOpen}
             >
-              {stats.isOpen ? 'Register Your Team' : 'Registration Closed'}
+              Register Your Team
             </Link>
             <Link
               to="/details"
@@ -339,9 +338,8 @@ const Home = () => {
               <Link
                 to="/register"
                 className="btn-glass text-lg px-8 py-4"
-                disabled={!stats.isOpen}
               >
-                {stats.isOpen ? 'Register Now' : 'Registration Closed'}
+                Register Now
               </Link>
               <Link
                 to="/details"

@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { useForm, useFieldArray } from 'react-hook-form'
+import { Navigate, useNavigate } from 'react-router-dom'
 import { 
   Users, 
   UserPlus, 
@@ -8,12 +9,16 @@ import {
   CheckCircle, 
   AlertCircle,
   Loader2,
-  Info
+  Info,
+  Lock
 } from 'lucide-react'
 import toast from 'react-hot-toast'
 import { teamsAPI, statusAPI } from '../services/api'
+import { useAuth } from '../contexts/AuthContext'
 
 const Register = () => {
+  const { isAuthenticated, isLoading: authLoading } = useAuth()
+  const navigate = useNavigate()
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [registrationStats, setRegistrationStats] = useState({
     totalTeams: 0,
@@ -51,6 +56,62 @@ const Register = () => {
   })
 
   const watchedMembers = watch('members')
+
+  // Show loading while checking authentication
+  if (authLoading) {
+    return (
+      <div className="min-h-screen bg-gray-950 flex items-center justify-center">
+        <div className="text-center">
+          <div className="spinner mb-4" />
+          <p className="text-gray-400">Checking authentication...</p>
+        </div>
+      </div>
+    )
+  }
+
+  // Redirect to login if not authenticated
+  if (!isAuthenticated) {
+    return (
+      <motion.div
+        initial="initial"
+        animate="in"
+        exit="out"
+        variants={pageVariants}
+        transition={pageTransition}
+        className="min-h-screen bg-gray-950 flex items-center justify-center"
+      >
+        <div className="max-w-md mx-auto px-4 text-center">
+          <div className="card">
+            <Lock className="w-16 h-16 text-primary-500 mx-auto mb-4" />
+            <h1 className="text-2xl font-bold text-white mb-4">Login Required</h1>
+            <p className="text-gray-400 mb-6">
+              You need to be logged in to register your team for HACK-AI-THON.
+            </p>
+            <div className="space-y-3">
+              <button
+                onClick={() => navigate('/auth/login', { state: { from: { pathname: '/register' } } })}
+                className="w-full btn-primary"
+              >
+                Login to Continue
+              </button>
+              <button
+                onClick={() => navigate('/auth/signup')}
+                className="w-full btn-outline"
+              >
+                Create Account
+              </button>
+              <button
+                onClick={() => navigate('/')}
+                className="w-full btn-ghost"
+              >
+                Back to Home
+              </button>
+            </div>
+          </div>
+        </div>
+      </motion.div>
+    )
+  }
 
   // Fetch registration stats
   useEffect(() => {
