@@ -240,99 +240,158 @@
 
 /* Hero Background Image */
 .hero-bg-image {
-  background-image: url('https://images.unsplash.com/photo-1517077304055-6e89abbf09b0?ixlib=rb-4.0.3&auto=format&fit=crop&w=2069&q=80');
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  animation: parallax-bg 20s ease-in-out infinite;
+  position: relative;
+  overflow: hidden;
 }
 
-/* Features Background Pattern */
-.features-bg-pattern {
-  background-image: url('https://images.unsplash.com/photo-1518709268805-4e9042af2176?ixlib=rb-4.0.3&auto=format&fit=crop&w=2025&q=80');
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
+/* Slow zoom animation for hero */
+.animate-slow-zoom {
+  animation: slowZoom 20s ease-in-out infinite;
 }
 
-/* Feature Card Backgrounds */
-.innovation-focus-bg {
-  background-image: url('https://images.unsplash.com/photo-1485827404703-89b55fcc595e?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80');
-  background-size: cover;
-  background-position: center;
+/* Pulse animation for CTA */
+.animate-pulse-slow {
+  animation: pulseSlow 8s ease-in-out infinite;
 }
 
-.expert-mentorship-bg {
-  background-image: url('https://images.unsplash.com/photo-1522071820081-009f0129c71c?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80');
-  background-size: cover;
-  background-position: center;
+/* Floating animation for tech elements */
+.animate-float-slow {
+  animation: floatSlow 6s ease-in-out infinite;
 }
 
-.amazing-prizes-bg {
-  background-image: url('https://images.unsplash.com/photo-1567427017947-545c5f8d16ad?ixlib=rb-4.0.3&auto=format&fit=crop&w=2006&q=80');
-  background-size: cover;
-  background-position: center;
+/* Glitch effect for tech vibes */
+.animate-glitch {
+  animation: glitch 3s ease-in-out infinite;
 }
 
-.three-day-experience-bg {
-  background-image: url('https://images.unsplash.com/photo-1531482615713-2afd69097998?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80');
-  background-size: cover;
-  background-position: center;
+/* Hover zoom effect for images */
+.hover-zoom {
+  transition: transform 0.5s ease;
 }
 
-/* CTA Background Image */
-.cta-bg-image {
-  background-image: url('https://images.unsplash.com/photo-1451187580459-43490279c0fa?ixlib=rb-4.0.3&auto=format&fit=crop&w=2072&q=80');
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  animation: zoom-in-out 15s ease-in-out infinite;
+.hover-zoom:hover {
+  transform: scale(1.1);
 }
 
-/* Image Animations */
-@keyframes parallax-bg {
-  0%, 100% {
-    transform: scale(1) translateY(0);
-  }
-  50% {
-    transform: scale(1.05) translateY(-10px);
-  }
+/* Parallax scroll effect */
+.parallax-element {
+  will-change: transform;
 }
 
-@keyframes zoom-in-out {
+/* Custom animations */
+@keyframes slowZoom {
   0%, 100% {
     transform: scale(1);
   }
   50% {
-    transform: scale(1.1);
+    transform: scale(1.05);
   }
 }
 
-/* Hover Effects for Cards */
-.card-hover:hover .innovation-focus-bg,
-.card-hover:hover .expert-mentorship-bg,
-.card-hover:hover .amazing-prizes-bg,
-.card-hover:hover .three-day-experience-bg {
-  transform: scale(1.1);
-  transition: transform 0.3s ease;
-}
-
-/* Image Loading Animation */
-.hero-bg-image,
-.features-bg-pattern,
-.cta-bg-image {
-  animation: fade-in 1s ease-in-out;
-}
-
-@keyframes fade-in {
-  from {
-    opacity: 0;
+@keyframes pulseSlow {
+  0%, 100% {
+    opacity: 0.8;
+    transform: scale(1);
   }
-  to {
+  50% {
     opacity: 1;
+    transform: scale(1.02);
   }
 }
 
+@keyframes floatSlow {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-15px);
+  }
+}
+
+@keyframes glitch {
+  0%, 100% {
+    transform: translate(0);
+  }
+  10% {
+    transform: translate(-2px, 2px);
+  }
+  20% {
+    transform: translate(2px, -2px);
+  }
+  30% {
+    transform: translate(-2px, -2px);
+  }
+  40% {
+    transform: translate(2px, 2px);
+  }
+  50% {
+    transform: translate(-2px, 2px);
+  }
+  60% {
+    transform: translate(2px, -2px);
+  }
+  70% {
+    transform: translate(-2px, -2px);
+  }
+  80% {
+    transform: translate(2px, 2px);
+  }
+  90% {
+    transform: translate(-2px, 2px);
+  }
+}
+
+/* Image loading states */
+.image-loading {
+  background: linear-gradient(90deg, #374151 25%, #4b5563 50%, #374151 75%);
+  background-size: 200% 100%;
+  animation: loading 1.5s infinite;
+}
+
+@keyframes loading {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+/* Responsive image optimizations */
+@media (max-width: 768px) {
+  .animate-slow-zoom,
+  .animate-pulse-slow {
+    animation: none; /* Disable heavy animations on mobile */
+  }
+  
+  .hero-bg-image img {
+    object-position: center center;
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .hero-bg-image::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.7);
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .animate-slow-zoom,
+  .animate-pulse-slow,
+  .animate-float-slow,
+  .animate-glitch {
+    animation: none;
+  }
+  
+  .hover-zoom {
+    transition: none;
+  }
+}
 /* Swiper overrides for carousel */
 .swiper-pagination-bullet {
   @apply bg-white/50 w-3 h-3;

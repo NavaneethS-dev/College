@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom'
 import { useState, useEffect } from 'react'
 import CountdownTimer from '../components/ui/CountDownTimer.jsx'
 import SponsorsCarousel from '../components/sections/SponsorsCarousel'
+import TechShowcase from '../components/sections/TechShowcase'
 import { statusAPI } from '../services/api'
 
 const Home = () => {
@@ -82,6 +83,17 @@ const Home = () => {
     }
   }
 
+  // Function to get feature images
+  const getFeatureImage = (imageType) => {
+    const images = {
+      'innovation-focus': 'https://images.pexels.com/photos/373543/pexels-photo-373543.jpeg?auto=compress&cs=tinysrgb&w=800&h=600&fit=crop',
+      'expert-mentorship': 'https://images.pexels.com/photos/1181675/pexels-photo-1181675.jpeg?auto=compress&cs=tinysrgb&w=800&h=600&fit=crop',
+      'amazing-prizes': 'https://images.pexels.com/photos/1181263/pexels-photo-1181263.jpeg?auto=compress&cs=tinysrgb&w=800&h=600&fit=crop',
+      'three-day-experience': 'https://images.pexels.com/photos/1181244/pexels-photo-1181244.jpeg?auto=compress&cs=tinysrgb&w=800&h=600&fit=crop'
+    }
+    return images[imageType] || images['innovation-focus']
+  }
+
   return (
     <motion.div
       id="main-content"
@@ -96,7 +108,13 @@ const Home = () => {
       <section id="hero" className="relative min-h-screen flex items-center justify-center overflow-hidden">
         {/* Hero Background Image */}
         <div className="absolute inset-0">
-          <div className="hero-bg-image"></div>
+          <div className="hero-bg-image">
+            <img 
+              src="https://images.pexels.com/photos/574071/pexels-photo-574071.jpeg?auto=compress&cs=tinysrgb&w=1920&h=1080&fit=crop" 
+              alt="Coding workspace with multiple monitors" 
+              className="w-full h-full object-cover animate-slow-zoom"
+            />
+          </div>
           <div className="absolute inset-0 bg-gradient-to-br from-primary-900/80 via-purple-900/70 to-blue-900/80"></div>
           <div className="absolute inset-0 bg-black/30"></div>
         </div>
@@ -263,8 +281,12 @@ const Home = () => {
       {/* Features Section */}
       <section id="features" className="py-20 bg-gray-900">
         {/* Background Pattern */}
-        <div className="absolute inset-0 opacity-5">
-          <div className="features-bg-pattern"></div>
+        <div className="absolute inset-0 opacity-10">
+          <img 
+            src="https://images.pexels.com/photos/325229/pexels-photo-325229.jpeg?auto=compress&cs=tinysrgb&w=1920&h=1080&fit=crop" 
+            alt="Technology background pattern" 
+            className="w-full h-full object-cover"
+          />
         </div>
         
         <div className="max-w-6xl mx-auto px-4">
@@ -320,7 +342,13 @@ const Home = () => {
                   className="card card-hover text-center group relative overflow-hidden"
                 >
                   {/* Feature Image Background */}
-                  <div className={`absolute inset-0 opacity-10 group-hover:opacity-20 transition-opacity duration-300 ${feature.image}-bg`}></div>
+                  <div className="absolute inset-0 opacity-0 group-hover:opacity-20 transition-opacity duration-500">
+                    <img 
+                      src={getFeatureImage(feature.image)} 
+                      alt={feature.title} 
+                      className="w-full h-full object-cover transform scale-110 group-hover:scale-125 transition-transform duration-700"
+                    />
+                  </div>
                   
                   <div className="mb-6">
                     <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-primary-500/10 group-hover:bg-primary-500/20 transition-colors">
@@ -356,11 +384,18 @@ const Home = () => {
         </div>
       </section>
 
+      {/* Technology Showcase Section */}
+      <TechShowcase />
+
       {/* CTA Section */}
       <section className="py-20 relative overflow-hidden">
         {/* CTA Background Image */}
         <div className="absolute inset-0">
-          <div className="cta-bg-image"></div>
+          <img 
+            src="https://images.pexels.com/photos/159201/circuit-circuit-board-resistor-computer-159201.jpeg?auto=compress&cs=tinysrgb&w=1920&h=1080&fit=crop" 
+            alt="Futuristic technology circuit board" 
+            className="w-full h-full object-cover animate-pulse-slow"
+          />
           <div className="absolute inset-0 bg-gradient-to-r from-primary-600/90 to-secondary-600/90"></div>
           <div className="absolute inset-0 bg-black/30"></div>
         </div>
