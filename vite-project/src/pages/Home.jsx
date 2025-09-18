@@ -94,9 +94,11 @@ const Home = () => {
     >
       {/* Hero Section */}
       <section id="hero" className="relative min-h-screen flex items-center justify-center overflow-hidden">
-        {/* Animated background */}
-        <div className="absolute inset-0 gradient-hero">
-          <div className="absolute inset-0 bg-black/20" />
+        {/* Hero Background Image */}
+        <div className="absolute inset-0">
+          <div className="hero-bg-image"></div>
+          <div className="absolute inset-0 bg-gradient-to-br from-primary-900/80 via-purple-900/70 to-blue-900/80"></div>
+          <div className="absolute inset-0 bg-black/30"></div>
         </div>
 
         {/* Animated particles/shapes */}
@@ -118,6 +120,29 @@ const Home = () => {
             animate="float"
             transition={{ delay: 2 }}
           />
+          
+          {/* Floating Code Elements */}
+          <motion.div
+            className="absolute top-1/4 right-1/4 text-primary-400/20 font-mono text-sm"
+            animate={{ 
+              opacity: [0.2, 0.5, 0.2],
+              y: [0, -20, 0]
+            }}
+            transition={{ duration: 4, repeat: Infinity }}
+          >
+            {'<AI />'}
+          </motion.div>
+          
+          <motion.div
+            className="absolute bottom-1/3 left-1/5 text-secondary-400/20 font-mono text-xs"
+            animate={{ 
+              opacity: [0.1, 0.4, 0.1],
+              x: [0, 15, 0]
+            }}
+            transition={{ duration: 5, repeat: Infinity, delay: 1 }}
+          >
+            {'function hack() { return innovation; }'}
+          </motion.div>
         </div>
 
         <motion.div
@@ -237,6 +262,11 @@ const Home = () => {
 
       {/* Features Section */}
       <section id="features" className="py-20 bg-gray-900">
+        {/* Background Pattern */}
+        <div className="absolute inset-0 opacity-5">
+          <div className="features-bg-pattern"></div>
+        </div>
+        
         <div className="max-w-6xl mx-auto px-4">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -257,22 +287,26 @@ const Home = () => {
               {
                 icon: Zap,
                 title: "Innovation Focus",
-                description: "Work on AI/ML challenges that matter and create solutions with real-world impact."
+                description: "Work on AI/ML challenges that matter and create solutions with real-world impact.",
+                image: "innovation-focus"
               },
               {
                 icon: Users,
                 title: "Expert Mentorship",
-                description: "Learn from industry leaders and get guidance from experienced professionals."
+                description: "Learn from industry leaders and get guidance from experienced professionals.",
+                image: "expert-mentorship"
               },
               {
                 icon: Trophy,
                 title: "Amazing Prizes",
-                description: "Win cash prizes, internships, and recognition from top tech companies."
+                description: "Win cash prizes, internships, and recognition from top tech companies.",
+                image: "amazing-prizes"
               },
               {
                 icon: Calendar,
                 title: "3-Day Experience",
-                description: "Immersive hackathon with workshops, networking, and collaborative learning."
+                description: "Immersive hackathon with workshops, networking, and collaborative learning.",
+                image: "three-day-experience"
               }
             ].map((feature, index) => {
               const Icon = feature.icon
@@ -283,15 +317,18 @@ const Home = () => {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true, amount: 0.3 }}
                   transition={{ duration: 0.6, delay: index * 0.1 }}
-                  className="card card-hover text-center group"
+                  className="card card-hover text-center group relative overflow-hidden"
                 >
+                  {/* Feature Image Background */}
+                  <div className={`absolute inset-0 opacity-10 group-hover:opacity-20 transition-opacity duration-300 ${feature.image}-bg`}></div>
+                  
                   <div className="mb-6">
                     <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-primary-500/10 group-hover:bg-primary-500/20 transition-colors">
                       <Icon className="w-8 h-8 text-primary-400" />
                     </div>
                   </div>
-                  <h3 className="text-xl font-semibold text-white mb-3">{feature.title}</h3>
-                  <p className="text-gray-400 leading-relaxed">{feature.description}</p>
+                  <h3 className="text-xl font-semibold text-white mb-3 relative z-10">{feature.title}</h3>
+                  <p className="text-gray-400 leading-relaxed relative z-10">{feature.description}</p>
                 </motion.div>
               )
             })}
@@ -320,8 +357,14 @@ const Home = () => {
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 bg-gradient-to-r from-primary-600 to-secondary-600 relative overflow-hidden">
-        <div className="absolute inset-0 bg-black/20" />
+      <section className="py-20 relative overflow-hidden">
+        {/* CTA Background Image */}
+        <div className="absolute inset-0">
+          <div className="cta-bg-image"></div>
+          <div className="absolute inset-0 bg-gradient-to-r from-primary-600/90 to-secondary-600/90"></div>
+          <div className="absolute inset-0 bg-black/30"></div>
+        </div>
+        
         <div className="relative z-10 max-w-4xl mx-auto px-4 text-center">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
